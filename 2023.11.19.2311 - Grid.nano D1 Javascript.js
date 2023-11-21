@@ -1,8 +1,28 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // Retrieve image of the day
+    // Retrieve image of the day based on # weeks since 2023.11.19
+    const imgNameList = [
+        "Week 1.png",
+        "Week 2.png",
+        "Week 3.png",
+        "Week 4.png",
+        "Week 5.png"
+    ]
+    function getWeeksSince(dateString) {
+        // This function calculates # of weeks since
+        const startDate = new Date(dateString);
+        const currentDate = new Date();
+        const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+        const weeksSince = Math.floor((currentDate - startDate) / millisecondsPerWeek);
+        return weeksSince;    
+    }
+    function pickImgName() {
+        const weeksSince = getWeeksSince("2023-11-19");
+        const imgName = imgNameList[weeksSince % imgNameList.length];
+        return imgName;
+    }
     const imgElement = document.getElementById("puzzleGrid");
-    imgElement.src = "testGrid1.png";
+    imgElement.src = pickImgName();
 
     // Define correct guesses for the image
     const horizontalCorrectWord = "weight";
@@ -15,12 +35,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const horizontalGuessTextBox = document.getElementById("horizontalGuessTextBox");
     const verticalGuessTextBox = document.getElementById("verticalGuessTextBox");
 
-    document.getElementById("test").addEventListener("click", test);
-    function test() {
-    }
 
     document.getElementById("submitGuesses").addEventListener("click", testGuesses);
     document.getElementById("showCorrectWords").addEventListener("click", showCorrectWords);
+
+    // Write clues
+    const horizontalClue = document.getElementById("horizontalClue");
+    const verticalClue = document.getElementById("verticalClue");
+    horizontalClue.textContent = "Word is " + horizontalCorrectWord.length + " letters long";
+    verticalClue.textContent = "Word is " + verticalCorrectWord.length + " letters long";
 
     // When you click on the "check my guesses!" button...
     function testGuesses() {
